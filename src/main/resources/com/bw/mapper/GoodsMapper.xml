@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+	namespace:工作空间的名称   名称随意
+ -->
+<mapper namespace="com.bw.mapper.GoodsMapper">
+	 <select id="queryGoodsAll" parameterType="map" resultType="com.bw.entity.Goods">
+	 	select g.*,b.bname,gs.gsname from 
+	 	brand b,goods g,goodskind gs where g.bid=b.bid and g.gsid=gs.gsid
+	 	<if test="gname!=null and gname!= ''">
+	 	 and g.gname like concat('%',#{gname},'%')
+	 	</if>
+	 	<if test="bid > 0">
+			and b.bid=#{bid}
+		</if>
+		
+		<if test="gsid > 0">
+			and gs.gsid=#{gsid}
+		</if>
+	 </select>
+	 
+	 <select id="queryGoodkind" resultType="com.bw.entity.Goodkind">
+		select * from goodskind
+	</select>
+	
+	<select id="queryBrand" resultType="com.bw.entity.Brand">
+		select * from brand
+	</select>
+	
+	 <insert id="add" parameterType="com.bw.entity.Goods">
+	 insert into goods(gname,bid,gsid,img) values(#{gname},#{bid},#{gsid},#{img})
+	 </insert>
+	 
+	 <update id="update" parameterType="com.bw.entity.Goods">
+		UPDATE goods SET gname=#{gname},bid=#{bid},gsid=#{gsid} where gid=#{gid}
+	</update>
+</mapper>
